@@ -1,39 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import { Save, Lock, Unlock, RefreshCw } from 'lucide-react';
-
-const prompts = [
-  "What made you smile today?",
-  "What's one thing you learned today?",
-  "What's something you're looking forward to?",
-  "What's a challenge you faced today?",
-  "What's something you're grateful for?",
-  "What's something you'd like to improve?",
-  "What's a conversation that stuck with you today?",
-  "What's something that surprised you today?",
-  "What's a small win you had today?",
-  "What's something you want to remember about today?",
-  "What's something you did today that you're proud of?",
-  "What's something that challenged your assumptions today?",
-  "What's a moment of peace you experienced today?",
-  "What's something you'd do differently if you could?",
-  "What's something that inspired you today?",
-  "What's a question you're pondering?",
-  "What's something you noticed about yourself today?",
-  "What's something you want to explore further?",
-  "What's a decision you made today?",
-  "What's something that energized you today?",
-  "What's something that drained your energy today?",
-  "What's a boundary you maintained today?",
-  "What's something you're curious about?",
-  "What's a habit you're working on?",
-  "What's something you need to let go of?",
-  "What's something you're excited about?",
-  "What's something you want to celebrate?",
-  "What's something you're processing?",
-  "What's something you observed about others today?",
-  "What's something you want to remember for tomorrow?"
-];
+import prompts from '../lib/prompts';
 
 const JournalApp = () => {
   const [title, setTitle] = useState('');
