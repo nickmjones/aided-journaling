@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
-import { Save } from 'lucide-react';
+import { Save, Lock, Unlock, RefreshCw } from 'lucide-react';
 
 const prompts = [
   "What made you smile today?",
@@ -39,25 +39,50 @@ const JournalApp = () => {
   const [title, setTitle] = useState('');
   const [answers, setAnswers] = useState(['', '', '']);
   const [selectedPrompts, setSelectedPrompts] = useState([]);
+  const [lockedPrompts, setLockedPrompts] = useState([false, false, false]);
   const [hasChanges, setHasChanges] = useState(false);
+
+  // Get a random prompt that isn't already selected
+  const getNewPrompt = (currentPrompts) => {
+    const availablePrompts = prompts.filter(prompt => !currentPrompts.includes(prompt));
+    return availablePrompts[Math.floor(Math.random() * availablePrompts.length)];
+  };
+
+  // Re-roll a specific prompt
+  const rerollPrompt = (index) => {
+    if (!lockedPrompts[index]) {
+      const newPrompts = [...selectedPrompts];
+      newPrompts[index] = getNewPrompt(newPrompts);
+      setSelectedPrompts(newPrompts);
+      setHasChanges(true);
+    }
+  };
+
+  // Toggle lock state for a prompt
+  const toggleLock = (index) => {
+    const newLocks = [...lockedPrompts];
+    newLocks[index] = !newLocks[index];
+    setLockedPrompts(newLocks);
+  };
 
   // Generate three random prompts on initial load
   useEffect(() => {
-    const getRandomPrompts = () => {
-      const shuffled = [...prompts].sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, 3);
-    };
-    setSelectedPrompts(getRandomPrompts());
+    const initialPrompts = [];
+    for (let i = 0; i < 3; i++) {
+      initialPrompts.push(getNewPrompt(initialPrompts));
+    }
+    setSelectedPrompts(initialPrompts);
   }, []);
 
   // Load from localStorage on mount
   useEffect(() => {
     const savedEntry = localStorage.getItem('journalEntry');
     if (savedEntry) {
-      const { title, answers, prompts } = JSON.parse(savedEntry);
+      const { title, answers, prompts, locks } = JSON.parse(savedEntry);
       setTitle(title);
       setAnswers(answers);
       setSelectedPrompts(prompts);
+      if (locks) setLockedPrompts(locks);
     }
   }, []);
 
@@ -67,10 +92,11 @@ const JournalApp = () => {
       localStorage.setItem('journalEntry', JSON.stringify({
         title,
         answers,
-        prompts: selectedPrompts
+        prompts: selectedPrompts,
+        locks: lockedPrompts
       }));
     }
-  }, [title, answers, selectedPrompts, hasChanges]);
+  }, [title, answers, selectedPrompts, hasChanges, lockedPrompts]);
 
   // Handle input changes
   const handleChange = (index, value) => {
@@ -147,7 +173,24 @@ const JournalApp = () => {
         
         {selectedPrompts.map((prompt, index) => (
           <div key={index} className="space-y-2">
-            <label className="block text-lg font-medium">{prompt}</label>
+            <div className="flex items-center gap-2">
+              <label className="flex-1 text-lg font-medium">{prompt}</label>
+              <button
+                onClick={() => rerollPrompt(index)}
+                className={`p-2 rounded hover:bg-gray-100 transition-colors ${lockedPrompts[index] ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={lockedPrompts[index]}
+                title={lockedPrompts[index] ? "Unlock to re-roll" : "Get new prompt"}
+              >
+                <RefreshCw className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => toggleLock(index)}
+                className={`p-2 rounded hover:bg-gray-100 transition-colors ${lockedPrompts[index] ? 'text-blue-600' : ''}`}
+                title={lockedPrompts[index] ? "Unlock prompt" : "Lock prompt"}
+              >
+                {lockedPrompts[index] ? <Lock className="w-4 h-4" /> : <Unlock className="w-4 h-4" />}
+              </button>
+            </div>
             <textarea
               value={answers[index]}
               onChange={(e) => handleChange(index, e.target.value)}
