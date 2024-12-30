@@ -1,4 +1,4 @@
-# Aided Journal
+# Aided Journal 📓
 
 A simple journaling app that provides random prompts to help you reflect on your day. Built with React, Vite, and Tailwind CSS.
 
