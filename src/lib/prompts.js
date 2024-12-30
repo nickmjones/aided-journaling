@@ -1,4 +1,4 @@
-const prompts = [
+export const prompts = [
   "What made you smile today?",
   "What's one thing you learned today?",
   "What's something you're looking forward to?",
@@ -34,5 +34,3 @@ const prompts = [
   "What's something you're struggling with?",
   "Who made a positive impact on you today?",
 ];
-
-export default prompts;

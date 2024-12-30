@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import { Save, Lock, Unlock, RefreshCw } from 'lucide-react';
-import prompts from '../lib/prompts';
+import { prompts } from '../lib/prompts';
 
 const JournalApp = () => {
   const [title, setTitle] = useState('');
