@@ -127,6 +127,9 @@ const JournalApp = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8">
+      <header className="flex flex-row items-center justify-center">
+        <h3 className="uppercase tracking-wider my-4">Aided Journaling</h3>
+      </header>
       <div className="space-y-4">
         <input
           type="text"
