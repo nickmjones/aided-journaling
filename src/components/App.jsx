@@ -1,11 +1,12 @@
-import JournalApp from "./JournalApp"
+import JournalApp from "./JournalApp";
+import Layout from "./Layout";
 
 function App() {
   return (
-    <main className="min-h-screen bg-gray-50">
+    <Layout>
       <JournalApp />
-    </main>
-  )
+    </Layout>
+  );
 }
 
-export default App
+export default App;
